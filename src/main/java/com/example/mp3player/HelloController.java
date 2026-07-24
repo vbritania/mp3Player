@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import javafx.animation.TranslateTransition;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -16,14 +18,26 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Slider;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.util.Duration;
+
+import javax.swing.plaf.ColorUIResource;
 
 
 public class HelloController implements Initializable{
+    @FXML
+    private ImageView myImage;
+
+    @FXML
+    private Circle myCircle = new Circle(50, Color.YELLOW);
+
 
     @FXML
     private Pane pane;
@@ -54,8 +68,35 @@ public class HelloController implements Initializable{
 
     private boolean running;
 
+
+
+
+
+
+
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
+        TranslateTransition translate = new TranslateTransition();
+        translate.setNode(myImage);
+        translate.setDuration(Duration.millis(2000));
+        translate.setCycleCount(TranslateTransition.INDEFINITE);
+        translate.setByX(631);
+        translate.setAutoReverse(true);
+        translate.play();
+
+
+
+        myCircle.setCenterX(0);
+        myCircle.setCenterY(-30);
+        TranslateTransition le = new TranslateTransition();
+        le.setNode(myCircle);
+        le.setDuration(Duration.millis(1000));
+        le.setCycleCount(TranslateTransition.INDEFINITE);
+        le.setByX(631);
+        le.setAutoReverse(true);
+        le.play();
+
+
 
         songs = new ArrayList<File>();
 

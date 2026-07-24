@@ -5,13 +5,15 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.Slider?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="177.0" prefWidth="631.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.mp3player.HelloController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="303.0" prefWidth="884.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.mp3player.HelloController">
    <children>
-      <Label fx:id="songLabel" alignment="CENTER" layoutX="6.0" layoutY="4.0" prefHeight="96.0" prefWidth="621.0" text="MP3 Player" textFill="#e11818">
+      <Label fx:id="songLabel" layoutX="6.0" layoutY="4.0" prefHeight="96.0" prefWidth="637.0" text="MP3 Player" textFill="#e11818">
          <font>
             <Font size="60.0" />
          </font>
@@ -24,5 +26,16 @@
       <Button fx:id="nextbtn" layoutX="290.0" layoutY="127.0" mnemonicParsing="false" onAction="#nextMedia" prefHeight="55.0" prefWidth="74.0" text="Next" />
       <ComboBox fx:id="speedBox" layoutX="364.0" layoutY="127.0" onAction="#changeSpeed" prefHeight="55.0" prefWidth="88.0" promptText="Speed" />
       <Slider fx:id="volumeSlider" layoutX="452.0" layoutY="140.0" max="100.0" prefHeight="20.0" prefWidth="170.0" value="50.0" />
+      <ImageView fx:id="myImage" fitHeight="121.0" fitWidth="160.0" layoutX="-6.0" layoutY="182.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@sonic_run.gif" />
+         </image>
+      </ImageView>
+      <Circle fx:id="myCircle" fill="#eaff00" layoutX="188.0" layoutY="272.0" radius="17.0" stroke="BLACK" strokeType="INSIDE" />
+      <ImageView fitHeight="239.0" fitWidth="222.0" layoutX="635.0" layoutY="-6.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@trey.gif" />
+         </image>
+      </ImageView>
    </children>
 </AnchorPane>
