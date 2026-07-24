@@ -1,5 +1,7 @@
 package com.example.mp3player;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -16,6 +18,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.util.Duration;
 
 public class HelloController implements Initializable {
     @FXML
@@ -25,7 +28,7 @@ public class HelloController implements Initializable {
     @FXML
     private Button playbtn, pausebtn, resetbtn, previousbtn, nextbtn;
     @FXML
-    private ComboBox<String> sppedBox;
+    private ComboBox<String> speedBox;
     @FXML
     private Slider volumeSlider;
     @FXML
@@ -40,7 +43,7 @@ public class HelloController implements Initializable {
     private ArrayList<File> songs;
 
     private int songNumber;
-    private int[] sppeds = {25, 50, 75, 100, 125, 150, 175, 200};
+    private int[] speeds = {25, 50, 75, 100, 125, 150, 175, 200};
 
     private Timer timer;
     private TimerTask task;
@@ -60,31 +63,142 @@ public class HelloController implements Initializable {
             System.out.println(file);
         }
     }
+
+    media = new Media(songs.get(songNumber).toURI().toString());
+    mediaPlayer = new MediaPlayer(media);
+    songLabel.setText(songs.get(songNumber).getName());
+
+    for (int i = 0; i < speeds.length; i++){
+        speedBox.getItems().add(Integer.toString(speeds[i])+"%");
+    }
+    speedBox.setOnAction(this::changeSpeed);
+
+    volumeSlider.valueProperty().addListener(new ChangeListener<Number>() {
+
+        @Override
+        public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+            mediaPlayer.setVolume(volumeSlider.getValue() * 0.01);
+        }
+
+    });
+
+    songProgressBar.setStyle("-fx-accent: #00FF00;");
     }
 
     public void playMedia(){
+        beginTimer();
+        changeSpeed(null);
+        mediaPlayer.setVolume(volumeSlider.getValue() * 0.01);
+        mediaPlayer.play();
 
     }
+
     public void pauseMedia(){
+        cancelTimer();
+        mediaPlayer.pause();
 
     }
+
     public void resetMedia(){
+        songProgressBar.setProgress(0);
+        mediaPlayer.seek(Duration.seconds(0));
 
     }
+
     public void previousMedia(){
+        if (songNumber > 0){
+            songNumber--;
 
+            mediaPlayer.stop();
+
+            if(running){
+                cancelTimer();
+            }
+
+            media = new Media(songs.get(songNumber).toURI().toString());
+            mediaPlayer = new MediaPlayer(media);
+            songLabel.setText(songs.get(songNumber).getName());
+
+            playMedia();
+        }else{
+            songNumber = songs.size() - 1;
+
+            mediaPlayer.stop();
+
+            if(running){
+                cancelTimer();
+            }
+
+            media = new Media(songs.get(songNumber).toURI().toString());
+            mediaPlayer = new MediaPlayer(media);
+            songLabel.setText(songs.get(songNumber).getName());
+            playMedia();
+        }
     }
+
     public void nextMedia(){
+        if (songNumber < songs.size() -1){
+            songNumber++;
 
+            mediaPlayer.stop();
+
+            if(running){
+                cancelTimer();
+            }
+
+            media = new Media(songs.get(songNumber).toURI().toString());
+            mediaPlayer = new MediaPlayer(media);
+            songLabel.setText(songs.get(songNumber).getName());
+
+            playMedia();
+        }else{
+            songNumber = 0;
+
+            mediaPlayer.stop();
+
+            if(running){
+                cancelTimer();
+            }
+
+            media = new Media(songs.get(songNumber).toURI().toString());
+            mediaPlayer = new MediaPlayer(media);
+            songLabel.setText(songs.get(songNumber).getName());
+            playMedia();
+        }
     }
-    public void changeSpeed(ActionEvent event){
 
+    public void changeSpeed(ActionEvent event) {
+        if (speedBox.getValue() == null) {
+            mediaPlayer.setRate(1);
+        } else {
+            mediaPlayer.setRate(Integer.parseInt(speedBox.getValue().substring(0, speedBox.getValue().length() - 1)) * 0.01);
+        }
     }
     public void beginTimer(){
+        timer = new Timer();
 
+        task = new TimerTask() {
+            @Override
+            public void run() {
+                running= true;
+                double current = mediaPlayer.getCurrentTime().toSeconds();
+                double end = media.getDuration().toSeconds();
+                System.out.println(current/end);
+                songProgressBar.setProgress(current/end);
+
+                if(current/end == 1){
+                    cancelTimer();
+                }
+            }
+
+        };
+        timer.scheduleAtFixedRate(task,0,1000);
     }
     public void cancelTimer(){
 
+
+        running = false;
+        timer.cancel();
     }
 
 }
