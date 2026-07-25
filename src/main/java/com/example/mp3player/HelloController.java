@@ -134,6 +134,12 @@ public class HelloController implements Initializable{
         });
 
         songProgressBar.setStyle("-fx-accent: #00FF00;");
+
+        mediaPlayer.setOnEndOfMedia( () -> {
+            javafx.application.Platform.runLater(() -> {
+                nextMedia();
+            });
+    });
     }
 
     public void playMedia() {
